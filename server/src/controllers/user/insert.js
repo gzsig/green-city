@@ -1,6 +1,6 @@
 const { UserModel } = require("../../models/User");
 
-const createDao = async (user) => {
+const insertDao = async (user) => {
   const { username, password } = user;
   const newUser = new UserModel({ username, password });
   try {
@@ -14,12 +14,12 @@ const createDao = async (user) => {
   }
 };
 
-exports.create = async (req, res) => {
+exports.insert = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await createDao({ username, password });
+    const result = await insertDao({ username, password });
     if (result.success) {
-      res.status(200).json({ user: result.user });
+      res.status(200).json({ user: result.user }).end();
     } else {
       res.status(400).end();
     }

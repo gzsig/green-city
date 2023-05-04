@@ -1,6 +1,6 @@
 const { UserModel } = require("../../models/User");
 
-const readDao = async (userId) => {
+const getDao = async (userId) => {
   try {
     const user = await UserModel.findById(userId).exec();
     return {
@@ -12,13 +12,13 @@ const readDao = async (userId) => {
   }
 };
 
-exports.read = async (req, res) => {
+exports.get = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await readDao(id);
+    const result = await getDao(id);
     console.log(result);
     if (result.success) {
-      res.status(200).json({ user: result.user });
+      res.status(200).json({ user: result.user }).end();
     } else {
       res.status(400).end();
     }

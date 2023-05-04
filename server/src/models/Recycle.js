@@ -4,10 +4,10 @@ const RecycleSchema = new mongoose.Schema({
   item: {
     type: String,
     required: true,
-    unique: true,
   },
   image: {
     type: String,
+    required: true,
   },
   points: {
     type: Number,
@@ -21,6 +21,7 @@ const RecycleSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 exports.RecycleModel = mongoose.model("Recycle", RecycleSchema);
