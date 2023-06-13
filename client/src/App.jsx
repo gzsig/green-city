@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import CreateUser from "./assets/register";
+import Login from "./assets/login";
+import ManageAwards from "./assets/manage-awards";
+import AssignAward from "./assets/assign-award";
+import UserAwards from "./assets/user-awards";
+import TotalPoints from "./assets/total-points";
+import PrivateRoute from "./private-route";
+import { ProvideAuth, useAuth } from "./auth-context";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const auth = useAuth();
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ProvideAuth>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              {!auth?.user && (
+                <li>
+                  <Link to="/create-user">Criar Usuário</Link>
+                </li>
+              )}
+              {!auth?.user && (
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+              )}
+              {auth?.user && (
+                <li>
+                  <Link to="/manage-awards">Gerenciar Prêmios</Link>
+                </li>
+              )}
+              {auth?.user && (
+                <li>
+                  <Link to="/assign-award">Atribuir Prêmio</Link>
+                </li>
+              )}
+              {auth?.user && (
+                <li>
+                  <Link to="/user-awards">Prêmios do Usuário</Link>
+                </li>
+              )}
+              {auth?.user && (
+                <li>
+                  <Link to="/total-points">Total de Pontos</Link>
+                </li>
+              )}
+            </ul>
+          </nav>
+
+          <Routes>
+            <Route path="/create-user" element={<CreateUser />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<PrivateRoute />}>
+              <Route path="/manage-awards" element={<ManageAwards />} />
+              <Route path="/assign-award" element={<AssignAward />} />
+              <Route path="/user-awards" element={<UserAwards />} />
+              <Route path="/total-points" element={<TotalPoints />} />
+            </Route>
+          </Routes>
+        </div>
+      </Router>
+    </ProvideAuth>
+  );
 }
 
-export default App
+export default App;
